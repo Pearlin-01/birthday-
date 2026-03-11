@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎁 Dr. Brightson Paul · gift box birthday</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+    }
+
+    /* ===== THEMED BACKGROUND GRID ===== */
+    body {
+      min-height: 100vh;
+      background-color: #0a0c12;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .bg-grid {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+      gap: 6px;
+      padding: 6px;
+      z-index: 0;
+      opacity: 0.25;
+      pointer-events: none;
+    }
+
+    .bg-cell {
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      border-radius: 12px;
+      filter: blur(2px) brightness(0.7);
+    }
+
+    /* main content layer */
+    .greeting-card {
+      position: relative;
+      z-index: 10;
+      max-width: 1300px;
+      width: 100%;
+      background: rgba(10, 18, 30, 0.65);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-radius: 60px;
+      border: 2px solid rgba(255, 215, 0, 0.4);
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.8), 0 0 0 2px rgba(255, 200, 0, 0.2) inset;
+      padding: 30px 30px 40px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #ffd966;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
+      padding: 0 15px;
+    }
+
+    .card-header h1 {
+      font-size: 2.2rem;
+      font-weight: 600;
+      text-shadow: 0 0 20px #ffb347, 2px 2px 0 #b8860b;
+    }
+
+    .header-buttons button {
+      background: rgba(255, 215, 0, 0.18);
+      border: 2px solid #ffd966;
+      color: #ffd966;
+      padding: 10px 28px;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+      font-size: 1.2rem;
+    }
+    .header-buttons button:hover {
+      background: #ffd966;
+      color: #0a0f1e;
+      box-shadow: 0 0 30px gold;
+      transform: scale(1.02);
+    }
+
+    .stage-progress {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #ffecb3;
+      margin: 10px 0 25px;
+      padding: 10px 25px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 60px;
+      font-size: 1.4rem;
+      font-weight: 500;
+      border: 1px solid #f1c40f;
+    }
+
+    .stage-container {
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 50px;
+      padding: 35px;
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      min-height: 550px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ===== GIFT BOX STYLES ===== */
+    .giftbox-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    .giftbox-wrapper:hover {
+      transform: scale(1.02);
+    }
+
+    .gift-box {
+      width: 380px;
+      height: 340px;
+      background: linear-gradient(145deg, #e63946, #c92a2a);
+      border-radius: 40px 40px 30px 30px;
+      position: relative;
+      box-shadow: 0 20px 30px rgba(0,0,0,0.6), 0 0 0 6px #f1c40f, 0 0 0 12px #b8860b;
+      margin-bottom: 25px;
+    }
+
+    .gift-box::before {
+      content: "";
+      position: absolute;
+      top: -32px;
+      left: -10px;
+      width: 110%;
+      height: 70px;
+      background: linear-gradient(145deg, #ffb3b3, #e63946);
+      border-radius: 40px 40px 0 0;
+      box-shadow: 0 -8px 0 #b03a2e, 0 8px 15px rgba(0,0,0,0.4);
+      border-bottom: 4px solid gold;
+    }
+
+    .gift-box::after {
+      content: "";
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 380px;
+      background: linear-gradient(90deg, #f7d44a, #f0a500);
+      border-radius: 30px;
+      box-shadow: 0 4px 10px #8b6913;
+      z-index: 2;
+    }
+
+    .gift-ribbon-h {
+      position: absolute;
+      top: 35%;
+      left: -20px;
+      width: 120%;
+      height: 55px;
+      background: linear-gradient(90deg, #f7d44a, #f0a500);
+      border-radius: 30px;
+      box-shadow: 0 4px 0 #a47e1b;
+      z-index: 3;
+    }
+
+    .gift-bow {
+      position: absolute;
+      top: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 80px;
+      background: #ffd966;
+      border-radius: 50% 50% 0 50%;
+      rotate: 45deg;
+      box-shadow: 0 10px 0 #b68b30, 60px 20px 0 #ffd966, 20px 60px 0 #ffd966;
+      z-index: 5;
+    }
+
+    .gift-text {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #fff7d7;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(6px);
+      padding: 18px 25px;
+      border-radius: 60px;
+      border: 3px solid gold;
+      text-align: center;
+      max-width: 800px;
+      text-shadow: 3px 3px 0 #ad7f2c;
+      line-height: 1.3;
+    }
+
+    /* ===== OPENED STATE – PHOTO CAROUSEL ===== */
+    .photo-stage {
+      display: flex;
+      gap: 40px;
+      align-items: center;
+      width: 100%;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .photo-box {
+      flex: 2;
+      min-width: 400px;
+      text-align: center;
+    }
+
+    .main-carousel-img {
+      width: 100%;
+      max-width: 750px;
+      max-height: 550px;
+      border-radius: 40px;
+      border: 6px solid #ffd966;
+      box-shadow: 0 25px 40px black;
+      object-fit: contain;
+      background: #1e1e2a;
+      cursor: pointer;
+      transition: transform 0.2s, filter 0.3s;
+    }
+    .main-carousel-img:hover {
+      transform: scale(1.01);
+      filter: brightness(1.1);
+      box-shadow: 0 0 35px gold;
+    }
+
+    .stage-description {
+      flex: 1;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(12px);
+      padding: 30px;
+      border-radius: 50px;
+      border: 2px solid rgba(255, 215, 0, 0.6);
+    }
+
+    .stage-description h2 {
+      font-size: 2.6rem;
+      color: #ffdb7c;
+      margin-bottom: 20px;
+      border-left: 10px solid gold;
+      padding-left: 20px;
+    }
+
+    .stage-description p {
+      font-size: 1.4rem;
+      color: #f5f0e0;
+      line-height: 1.6;
+      white-space: pre-line;
+    }
+
+    .highlight {
+      background: linear-gradient(145deg, #f9e05e, #ffc800);
+      color: #0a0f1a;
+      font-weight: 700;
+      padding: 3px 14px;
+      border-radius: 40px;
+      display: inline-block;
+      margin: 4px;
+    }
+
+    .quote-badge {
+      margin-top: 25px;
+      background: rgba(255,215,0,0.15);
+      font-size: 1.6rem;
+      padding: 16px;
+      border-radius: 40px;
+      font-style: italic;
+      border-left: 8px solid gold;
+      white-space: pre-line;
+    }
+
+    .click-hint-carousel {
+      margin-top: 15px;
+      color: #ffd966;
+      font-size: 1.4rem;
+      background: rgba(0,0,0,0.5);
+      padding: 8px 25px;
+      border-radius: 40px;
+      display: inline-block;
+    }
+
+    .nav-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 35px;
+    }
+
+    .nav-btn {
+      background: #1e1a0c;
+      border: 3px solid gold;
+      color: gold;
+      font-size: 2.4rem;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .nav-btn:hover {
+      background: gold;
+      color: black;
+      box-shadow: 0 0 50px gold;
+    }
+
+    #bg-music {
+      width: 240px;
+      margin-top: 30px;
+      margin-left: auto;
+      margin-right: auto;
+      display: block;
+      filter: drop-shadow(0 0 12px gold);
+      border-radius: 40px;
+    }
+
+    #confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-grid" id="bgGrid"></div>
+  <canvas id="confetti-canvas"></canvas>
+
+  <main class="greeting-card">
+    <div class="card-header">
+      <h1><i class="fas fa-gift"></i> Dr. Brightson Paul .W</h1>
+      <div class="header-buttons">
+        <button id="burstCrackers">🎉 burst crackers</button>
+      </div>
+    </div>
+
+    <div class="stage-progress">
+      <span>📦 stage <span id="currentStageNum">1</span>/<span id="totalStages">5</span></span>
+      <span id="stageTitleName">🎁 big gift box</span>
+    </div>
+
+    <div class="stage-container" id="stageContainer"></div>
+
+    <div class="nav-buttons">
+      <button class="nav-btn" id="prevStageBtn"><i class="fas fa-arrow-left"></i></button>
+      <button class="nav-btn" id="nextStageBtn"><i class="fas fa-arrow-right"></i></button>
+    </div>
+
+    <audio id="bg-music" loop controls>
+  <source src="music/birthday.mp3" type="audio/mp3">
+</audio>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0"></script>
+  <script>
+    (function() {
+      // ---------- REORGANIZED STAGES (5 stages) ----------
+      const stages = [
+        // STAGE 0: HAPPIEST BIRTHDAY with full blessing
+        {
+          title: "HAPPIEST BIRTHDAY DR.BRIGHTSON PAUL.W",
+          desc: `Watching you grow into the person you are today has been one of the greatest blessings of our lives. Your dedication, compassion, and commitment to helping others as a doctor make us incredibly proud every single day.
+
+May God continue to guide your hands as you heal, strengthen your heart as you serve, and bless your life with happiness, wisdom, and success.
+
+Happy Birthday, Brightson Paul. You will always be our greatest pride and blessing.`,
+          mainImg: "images/brt3.png",
+          thumbImgs: [
+            "images/brt.jpeg", "images/brt1.png", "images/brt2.jpeg", "images/brt4.jpeg",
+            "images/brt5.jpeg", "images/brt6.jpeg", "images/brt7.jpeg", "images/brt8.jpeg"
+          ],
+          quote: `"The Lord bless you and keep you; the Lord make His face shine upon you and be gracious to you." — Numbers 6:24-26`
+        },
+        // STAGE 1: FAMILY & BROTHERS (combined)
+        {
+          title: "🎁 Family & Brothers",
+          desc: `The ones who have been there since the beginning – your family and brothers. Through every milestone, every challenge, and every celebration, their love has been your foundation.`,
+          mainImg: "images/bigfam1.jpeg",
+          thumbImgs: [
+            // family who loves you
+            "images/fami1.jpeg", "images/fam2.jpeg", "images/fam3.jpeg", "images/fam4.jpeg", "images/fam5.jpeg","images/fam6.png","images/fam7.jpeg","images/fam8.jpeg","images/fam9.jpeg","images/fam10.jpeg","images/fam011.jpeg","images/fam11.jpeg","images/fam12.jpeg",
+            // brothers
+            "images/bro2.jpeg", "images/bro1.jpeg", "images/bro3.jpeg", "images/bro4.jpeg","images/bro5.jpeg","images/bro6.jpeg","images/bro7.jpeg","images/bro8.jpeg","images/bro9.jpeg","images/bro10.jpeg",
+            // family that adores you
+            "images/bigfam1.jpeg", "images/bigfam2.jpeg", "images/bigfam3.jpeg", "images/bigfam4.jpeg","images/bigfam5.jpeg","images/bigfam6.jpeg"
+          ],
+          quote: `Happy Birthday, bro! My partner in crime, my secret keeper, and the reason half of my childhood memories are both amazing and slightly suspicious. Life wouldn’t be the same without you!`
+        },
+        // STAGE 2: MEMORIES & FRIENDS (combined)
+        {
+          title: "🎁 Memories & Friends",
+          desc: `Moments frozen in time and the friends who made them unforgettable. Behind the white coat is the person we admire and love.`,
+          mainImg: "images/mem1.jpeg",
+          thumbImgs: [
+            // stories/memories
+            "images/mem1.jpeg", "images/mem2.jpeg", "images/mem3.jpeg", "images/mem4.jpeg","images/mem5.jpeg","images/mem6.jpeg","images/mem7.jpeg","images/mem8.jpeg",
+            // friends
+            "images/frnd1.jpeg", "images/frnd2.jpeg", "images/frnd3.jpeg"
+          ],
+          quote: `brother, doctor, friend – happy birthday Dr Brightson`
+        },
+        // STAGE 3: THE MAN YOU HAVE BECOME & MOMENT OF PRIDE (with emotional words)
+        {
+          title: "🎁 The Man You Have Become",
+          desc: `Every sleepless night, every sacrifice, every moment of doubt – you pushed through. You are the first doctor in our family, a trailblazer, and a blessing to us all. The hardships you endured shaped the incredible person you are today. We have watched you rise, and our hearts overflow with pride. You are not just a doctor; you are hope, strength, and love personified.`,
+          mainImg: "images/doctor.PNG",
+          thumbImgs: [
+            // doctor images
+            "images/doctor.PNG", "images/doc1.jpeg", "images/doc2.jpeg", "images/doc3.jpeg", "images/doc4.jpeg",
+            // graduation / pride
+            "images/grad1.png", "images/grad2.png", "images/grad3.png", "images/grad4.jpeg", "images/grad5.jpeg"
+          ],
+          quote: `"The years that built the doctor, the struggles that forged a hero. We are so proud of you."`
+        },
+        // STAGE 4: FINAL GIFT BOX – BEST WISHES FROM THE FAMILY
+        {
+          title: "🎁 Best Wishes from Mummy, Daddy & Pearlin",
+          desc: `Dear Brightson Paul,
+
+On your special day, the entire family wraps you in love and prayers. May this year bring you boundless joy, good health, and fulfillment in all you do.
+
+We are endlessly grateful for you.`,
+          mainImg: "images/fam3.jpeg",
+          thumbImgs: [
+            "images/fam3.jpeg"
+          ],
+          quote: `"For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you, plans to give you hope and a future." – Jeremiah 29:11\n\nHappy Birthday, with all our love! ❤️`
+        }
+      ];
+
+      // ---------- GLOBAL STATE ----------
+      let currentStage = 0;
+      const stageOpen = new Array(stages.length).fill(false);
+      // Combine mainImg + thumbImgs for carousel (remove duplicates)
+      const stageAllImages = stages.map(s => {
+        const all = [s.mainImg, ...s.thumbImgs];
+        return all.filter((value, index, self) => self.indexOf(value) === index);
+      });
+      const stageImageIndices = new Array(stages.length).fill(0);
+
+      const stageContainer = document.getElementById("stageContainer");
+      const prevBtn = document.getElementById("prevStageBtn");
+      const nextBtn = document.getElementById("nextStageBtn");
+      const totalSpan = document.getElementById("totalStages");
+      totalSpan.innerText = stages.length;
+
+      // ---------- FALLBACK IMAGE ----------
+      const fallbackImage = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%232a2a3a'/%3E%3Ctext x='50%25' y='50%25' font-size='28' font-family='Arial' fill='%23ffd966' text-anchor='middle' dy='.3em'%3E🎁 Birthday%3C/text%3E%3Ctext x='50%25' y='65%25' font-size='20' fill='%23ffd966' text-anchor='middle'%3Eimage not found%3C/text%3E%3C/svg%3E";
+
+      function handleImageError(img) {
+        img.onerror = null;
+        img.src = fallbackImage;
+      }
+
+      // ---------- CONFETTI ----------
+      function popCrackers(intensity = 'normal') {
+        if (intensity === 'big') {
+          confetti({particleCount: 200, spread: 120, origin: {y: 0.6}, colors: ['#ffd700', '#ffaa00', '#ffffff']});
+          setTimeout(() => confetti({particleCount: 150, spread: 90, origin: {y: 0.5, x: 0.3}, colors: ['#ffd966', '#b8860b']}), 150);
+          setTimeout(() => confetti({particleCount: 150, spread: 90, origin: {y: 0.5, x: 0.7}, colors: ['#ffd966', '#b8860b']}), 300);
+        } else {
+          confetti({particleCount: 60, spread: 70, origin: {y: 0.6}, colors: ['#ffd966', '#f0e68c']});
+        }
+      }
+
+      // ---------- RENDER ----------
+      function renderStage(index) {
+        const s = stages[index];
+        const isOpen = stageOpen[index];
+        const currentImgIdx = stageImageIndices[index];
+        const images = stageAllImages[index];
+        const currentImageSrc = images[currentImgIdx] || fallbackImage;
+
+        let innerHTML = '';
+
+        if (!isOpen) {
+          // Build gift box HTML – only include text for the first stage
+          let giftBoxHTML = `
+            <div class="giftbox-wrapper" id="giftboxClick">
+              <div class="gift-box">
+                <div class="gift-ribbon-h"></div>
+                <div class="gift-bow"></div>
+              </div>
+          `;
+          if (index === 0) {
+            giftBoxHTML += `<div class="gift-text">HAPPIEST BIRTHDAY DR.BRIGHTSON PAUL.W</div>`;
+          }
+          giftBoxHTML += `</div>`;
+          innerHTML = giftBoxHTML;
+        } else {
+          innerHTML = `
+            <div class="photo-stage">
+              <div class="photo-box">
+                <img class="main-carousel-img" id="carouselImg" src="${currentImageSrc}" alt="memory">
+                <div class="click-hint-carousel"><i class="fas fa-hand-pointer"></i> click photo to change</div>
+              </div>
+              <div class="stage-description">
+                <h2>${s.title.replace('🎁','')}</h2>
+                <p>${s.desc}</p>
+                <div class="quote-badge">${s.quote}</div>
+              </div>
+            </div>
+          `;
+        }
+
+        stageContainer.innerHTML = innerHTML;
+
+        document.getElementById("currentStageNum").innerText = index + 1;
+        document.getElementById("stageTitleName").innerText = isOpen ? s.title.replace('🎁','').trim() : '🎁 closed gift';
+
+        const img = document.getElementById('carouselImg');
+        if (img) {
+          img.onerror = function() { handleImageError(img); };
+        }
+
+        if (!isOpen) {
+          const giftbox = document.getElementById("giftboxClick");
+          if (giftbox) {
+            giftbox.addEventListener('click', (e) => {
+              e.stopPropagation();
+              stageOpen[index] = true;
+              stageImageIndices[index] = 0;
+              popCrackers('big');
+              renderStage(index);
+            });
+          }
+        } else {
+          const carouselImg = document.getElementById("carouselImg");
+          if (carouselImg) {
+            carouselImg.addEventListener('click', (e) => {
+              e.stopPropagation();
+              const stageIdx = currentStage;
+              const imgs = stageAllImages[stageIdx];
+              let newIdx = (stageImageIndices[stageIdx] + 1) % imgs.length;
+              stageImageIndices[stageIdx] = newIdx;
+              carouselImg.src = imgs[newIdx];
+              carouselImg.onerror = function() { handleImageError(carouselImg); };
+              popCrackers('normal');
+            });
+          }
+        }
+      }
+
+      // ---------- NAVIGATION ----------
+      prevBtn.onclick = () => {
+        if (currentStage > 0) {
+          currentStage--;
+          renderStage(currentStage);
+        } else {
+          popCrackers('normal');
+        }
+      };
+
+      nextBtn.onclick = () => {
+        if (currentStage < stages.length - 1) {
+          currentStage++;
+          renderStage(currentStage);
+        } else {
+          popCrackers('normal');
+        }
+      };
+
+      document.getElementById("burstCrackers").addEventListener('click', () => popCrackers('big'));
+
+      // ---------- BUILD THEMED BACKGROUND GRID ----------
+      const bgGrid = document.getElementById("bgGrid");
+      const themeImages = [
+        "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400",
+        "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400",
+        "https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=400",
+        "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400",
+        "https://images.unsplash.com/photo-1584982751601-97dcc096659c?w=400",
+        "https://images.unsplash.com/photo-1533130061952-99317c4331e8?w=400",
+        "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400",
+        "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=400",
+        "https://images.unsplash.com/photo-1558980394-6c48e46a980c?w=400",
+        "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=400",
+        "https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?w=400",
+        "https://images.unsplash.com/photo-1526724038726-9537f0f4487a?w=400",
+        "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=400",
+        "https://images.unsplash.com/photo-1533107862482-0f6974e1facc?w=400",
+        "https://images.unsplash.com/photo-1547447134-cd3f5c716030?w=400",
+      ];
+      for (let i = 0; i < 24; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'bg-cell';
+        const randomImg = themeImages[Math.floor(Math.random() * themeImages.length)];
+        cell.style.backgroundImage = `url('${randomImg}')`;
+        bgGrid.appendChild(cell);
+      }
+
+      renderStage(0);
+    })();
+  </script>
+</body>
+</html>
+
