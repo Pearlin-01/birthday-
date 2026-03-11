@@ -1,0 +1,246 @@
+(function() {
+
+const stages = [
+
+{
+title: "HAPPIEST BIRTHDAY DR.BRIGHTSON PAUL.W",
+desc: `Watching you grow into the person you are today has been one of the greatest blessings of our lives. Your dedication, compassion, and commitment to helping others as a doctor make us incredibly proud every single day.
+
+May God continue to guide your hands as you heal, strengthen your heart as you serve, and bless your life with happiness, wisdom, and success.
+
+Happy Birthday, Brightson Paul. You will always be our greatest pride and blessing.`,
+mainImg: "images/brt3.png",
+thumbImgs: [
+"images/brt.jpeg","images/brt1.png","images/brt2.jpeg","images/brt4.jpeg",
+"images/brt5.jpeg","images/brt6.jpeg","images/brt7.jpeg","images/brt8.jpeg"
+],
+quote: `"The Lord bless you and keep you; the Lord make His face shine upon you and be gracious to you." — Numbers 6:24-26`
+},
+
+{
+title: "🎁 Family & Brothers",
+desc: `The ones who have been there since the beginning – your family and brothers. Through every milestone, every challenge, and every celebration, their love has been your foundation.`,
+mainImg: "images/bigfam1.jpeg",
+thumbImgs: [
+"images/fami1.jpeg","images/fam2.jpeg","images/fam3.jpeg","images/fam4.jpeg","images/fam5.jpeg",
+"images/fam6.png","images/fam7.jpeg","images/fam8.jpeg","images/fam9.jpeg","images/fam10.jpeg",
+"images/fam011.jpeg","images/fam11.jpeg","images/fam12.jpeg",
+"images/bro2.jpeg","images/bro1.jpeg","images/bro3.jpeg","images/bro4.jpeg",
+"images/bro5.jpeg","images/bro6.jpeg","images/bro7.jpeg","images/bro8.jpeg","images/bro9.jpeg","images/bro10.jpeg",
+"images/bigfam1.jpeg","images/bigfam2.jpeg","images/bigfam3.jpeg","images/bigfam4.jpeg","images/bigfam5.jpeg","images/bigfam6.jpeg"
+],
+quote:`Happy Birthday, bro! My partner in crime, my secret keeper, and the reason half of my childhood memories are both amazing and slightly suspicious. Life wouldn’t be the same without you!`
+},
+
+{
+title:"🎁 Memories & Friends",
+desc:`Moments frozen in time and the friends who made them unforgettable. Behind the white coat is the person we admire and love.`,
+mainImg:"images/mem1.jpeg",
+thumbImgs:[
+"images/mem1.jpeg","images/mem2.jpeg","images/mem3.jpeg","images/mem4.jpeg",
+"images/mem5.jpeg","images/mem6.jpeg","images/mem7.jpeg","images/mem8.jpeg",
+"images/frnd1.jpeg","images/frnd2.jpeg","images/frnd3.jpeg"
+],
+quote:`brother, doctor, friend – happy birthday Dr Brightson`
+},
+
+{
+title:"🎁 The Man You Have Become",
+desc:`Every sleepless night, every sacrifice, every moment of doubt – you pushed through. You are the first doctor in our family, a trailblazer, and a blessing to us all.`,
+mainImg:"images/doctor.PNG",
+thumbImgs:[
+"images/doctor.PNG","images/doc1.jpeg","images/doc2.jpeg","images/doc3.jpeg","images/doc4.jpeg",
+"images/grad1.png","images/grad2.png","images/grad3.png","images/grad4.jpeg","images/grad5.jpeg"
+],
+quote:`"The years that built the doctor, the struggles that forged a hero. We are so proud of you."`
+},
+
+{
+title:"🎁 Best Wishes from Mummy, Daddy & Pearlin",
+desc:`Dear Brightson Paul,
+
+On your special day, the entire family wraps you in love and prayers.`,
+mainImg:"images/fam3.jpeg",
+thumbImgs:["images/fam3.jpeg"],
+quote:`"For I know the plans I have for you, declares the Lord." – Jeremiah 29:11`
+}
+
+]
+
+let currentStage = 0
+const stageOpen = new Array(stages.length).fill(false)
+
+const stageAllImages = stages.map(s=>{
+const all=[s.mainImg,...s.thumbImgs]
+return all.filter((value,index,self)=>self.indexOf(value)===index)
+})
+
+const stageImageIndices = new Array(stages.length).fill(0)
+
+const stageContainer=document.getElementById("stageContainer")
+const prevBtn=document.getElementById("prevStageBtn")
+const nextBtn=document.getElementById("nextStageBtn")
+
+document.getElementById("totalStages").innerText=stages.length
+
+
+function popCrackers(intensity='normal'){
+
+if(intensity==='big'){
+
+confetti({particleCount:200,spread:120,origin:{y:0.6}})
+setTimeout(()=>confetti({particleCount:150,spread:90,origin:{y:0.5,x:0.3}}),150)
+setTimeout(()=>confetti({particleCount:150,spread:90,origin:{y:0.5,x:0.7}}),300)
+
+}else{
+
+confetti({particleCount:60,spread:70,origin:{y:0.6}})
+
+}
+
+}
+
+
+function renderStage(index){
+
+const s=stages[index]
+const isOpen=stageOpen[index]
+const images=stageAllImages[index]
+const currentImgIdx=stageImageIndices[index]
+
+let innerHTML=''
+
+if(!isOpen){
+
+innerHTML=`
+
+<div class="giftbox-wrapper" id="giftboxClick">
+
+<div class="gift-box">
+<div class="gift-ribbon-h"></div>
+<div class="gift-bow"></div>
+</div>
+
+${index===0 ? `<div class="gift-text">HAPPIEST BIRTHDAY DR.BRIGHTSON PAUL.W</div>`:''}
+
+</div>
+
+`
+
+}else{
+
+innerHTML=`
+
+<div class="photo-stage">
+
+<div class="photo-box">
+<img class="main-carousel-img" id="carouselImg" src="${images[currentImgIdx]}">
+<div class="click-hint-carousel">click photo to change</div>
+</div>
+
+<div class="stage-description">
+<h2>${s.title.replace('🎁','')}</h2>
+<p>${s.desc}</p>
+<div class="quote-badge">${s.quote}</div>
+</div>
+
+</div>
+
+`
+
+}
+
+stageContainer.innerHTML=innerHTML
+
+document.getElementById("currentStageNum").innerText=index+1
+document.getElementById("stageTitleName").innerText=isOpen?s.title:'🎁 closed gift'
+
+
+if(!isOpen){
+
+const giftbox=document.getElementById("giftboxClick")
+
+giftbox.addEventListener('click', (e) => {
+  e.stopPropagation();
+
+  stageOpen[index] = true;
+  stageImageIndices[index] = 0;
+
+  popCrackers('big');
+
+  /* 🎵 PLAY BIRTHDAY MUSIC */
+  const music = document.getElementById("bg-music");
+  if (music) {
+    music.muted = false;
+    music.currentTime = 0;
+    music.play().catch(() => {});
+  }
+
+  renderStage(index);
+});
+
+/* 🎵 MUSIC FIX */
+const music=document.getElementById("bg-music")
+
+if(music){
+music.muted=false
+music.currentTime=0
+
+music.play().catch(()=>{
+console.log("Autoplay blocked until interaction")
+})
+}
+
+renderStage(index)
+
+})
+
+}else{
+
+const carouselImg=document.getElementById("carouselImg")
+
+carouselImg.addEventListener("click",(e)=>{
+
+e.stopPropagation()
+
+let newIdx=(stageImageIndices[index]+1)%images.length
+stageImageIndices[index]=newIdx
+
+carouselImg.src=images[newIdx]
+
+popCrackers('normal')
+
+})
+
+}
+
+}
+
+
+prevBtn.onclick=()=>{
+
+if(currentStage>0){
+currentStage--
+renderStage(currentStage)
+}else{
+popCrackers()
+}
+
+}
+
+nextBtn.onclick=()=>{
+
+if(currentStage<stages.length-1){
+currentStage++
+renderStage(currentStage)
+}else{
+popCrackers()
+}
+
+}
+
+document.getElementById("burstCrackers").addEventListener("click",()=>popCrackers('big'))
+
+renderStage(0)
+
+})()
